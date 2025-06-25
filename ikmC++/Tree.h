@@ -25,6 +25,7 @@ public:
     bool LoadFromFile(const std::string& fileName);
     bool LoadFromConsole();
     void GenerateRandom(int n, int maxLetters);
+    void PrintData() const;
     int ComputeMinApologies();
 };
 

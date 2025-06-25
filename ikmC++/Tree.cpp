@@ -63,7 +63,6 @@ bool Tree::LoadFromFile(const std::string& fileName) {
             Nodes[i].AddNeighbor(neighbor);
         }
     }
-
     long long total = 0;
     for (int i = 1; i <= N; ++i) total += Nodes[i].GetNeighbors().size();
     if (total % 2 != 0 || total / 2 != N - 1) {
@@ -134,9 +133,21 @@ void Tree::GenerateRandom(int n, int maxLetters) {
         << " гнёзд (макс писем в узле = " << maxLetters << ").\n";
 }
 
+void Tree::PrintData() const {
+    std::cout << N << "\n";
+    for (int i = 1; i <= N; ++i) {
+        int count = Nodes[i].GetNeighbors().size();
+        int letters = Nodes[i].GetLetters();
+        std::cout << count << " " << letters;
+        for (int v : Nodes[i].GetNeighbors()) {
+            std::cout << " " << v;
+        }
+        std::cout << "\n";
+    }
+}
+
 int Tree::ComputeMinApologies() {
     if (N == 0) return 0;
-
     std::vector<int> parent(N + 1, 0), dist(N + 1, -1);
     std::queue<int> q;
     dist[1] = 0;
@@ -151,29 +162,22 @@ int Tree::ComputeMinApologies() {
             }
         }
     }
-
     std::vector<bool> inSub(N + 1, false);
-    int terminals = 0;
     for (int i = 1; i <= N; ++i) {
         if (Nodes[i].GetLetters() > 0) {
-            ++terminals;
             int u = i;
-            while (!inSub[u]) {
+            while (u != 0 && !inSub[u]) {
                 inSub[u] = true;
-                if (u == 1) break;
                 u = parent[u];
             }
         }
     }
     int Vp = 0;
-    for (int i = 1; i <= N; ++i)
-        if (inSub[i]) ++Vp;
+    for (int i = 1; i <= N; ++i) if (inSub[i]) ++Vp;
     int Ep = std::max(0, Vp - 1);
-
     int maxD = 0;
-    for (int i = 1; i <= N; ++i)
-        if (Nodes[i].GetLetters() > 0)
-            maxD = std::max(maxD, dist[i]);
-
+    for (int i = 1; i <= N; ++i) {
+        if (Nodes[i].GetLetters() > 0) maxD = std::max(maxD, dist[i]);
+    }
     return Ep - maxD;
 }
