@@ -46,6 +46,7 @@ int main() {
                 continue;
             }
             tree.GenerateRandom(n, maxLetters);
+            tree.PrintData();
             loaded = true;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             break;
@@ -57,8 +58,8 @@ int main() {
             std::cout << "Неверный выбор, попробуйте снова.\n";
             continue;
         }
-        if (!loaded) continue;
 
+        if (!loaded) continue;
         int result = tree.ComputeMinApologies();
         std::cout << "Минимальное количество извинений: " << result << "\n";
     }
